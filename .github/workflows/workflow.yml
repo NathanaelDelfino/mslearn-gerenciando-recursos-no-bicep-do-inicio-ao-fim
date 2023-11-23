@@ -12,15 +12,17 @@ permissions:
   contents: read
 
 jobs:
-
+  # Build the application and database.
+  build:
+    uses: ./.github/workflows/build.yml
   # Lint the Bicep file.
   lint:
     uses: ./.github/workflows/lint.yml
 
   # Deploy to the test environment.
   deploy-test:
-    uses: ./.github/workflows/deploy.yml
-    needs: lint
+    needs: [build, lint]
+    uses: ./.github/workflows/deploy.yml    
     with:
       environmentType: Test
       resourceGroupName: ToyWebsiteTest
@@ -32,9 +34,9 @@ jobs:
       reviewApiKey: ${{ secrets.REVIEW_API_KEY_TEST }}
 
   # Deploy to the production environment.
-  deploy-production:
-    uses: ./.github/workflows/deploy.yml
-    needs: deploy-test
+  deploy-production:    
+    needs: [build, lint, deploy-test]
+    uses: ./.github/workflows/deploy.yml    
     with:
       environmentType: Production
       resourceGroupName: ToyWebsiteProduction
