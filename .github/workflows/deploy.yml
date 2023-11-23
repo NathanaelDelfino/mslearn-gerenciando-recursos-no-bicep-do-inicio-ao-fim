@@ -82,8 +82,6 @@ jobs:
         template: ./deploy/main.bicep
         parameters: >
            environmentType=${{ inputs.environmentType }}
-           reviewApiUrl=${{ inputs.reviewApiUrl }}
-           reviewApiKey=${{ secrets.reviewApiKey }}
 # Deploy website           
   deploy-website:
     needs: deploy
