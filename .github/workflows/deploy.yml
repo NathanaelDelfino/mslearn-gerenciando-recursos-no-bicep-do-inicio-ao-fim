@@ -47,7 +47,6 @@ jobs:
          template: ./deploy/main.bicep
          parameters: >
            environmentType=${{ inputs.environmentType }}
-           reviewApiKey=${{ secrets.reviewApiKey }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
            sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}
          deploymentMode: Validate
@@ -61,7 +60,6 @@ jobs:
          template: ./deploy/main.bicep
          parameters: >
            environmentType=${{ inputs.environmentType }}
-           reviewApiKey=${{ secrets.reviewApiKey }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
            sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}
          additionalArguments: --what-if
@@ -96,7 +94,6 @@ jobs:
         template: ./deploy/main.bicep
         parameters: >
            environmentType=${{ inputs.environmentType }}           
-           reviewApiKey=${{ secrets.reviewApiKey }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
            sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}
 
