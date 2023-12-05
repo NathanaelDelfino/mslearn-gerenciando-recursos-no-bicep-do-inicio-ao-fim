@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "U4J/VJX0PDEvP9GKCTNnwFo5D11VgTRpg+UzafyVhve1KojiKuzE+53j/l+iK8BSY7lxAMR3mxdU4TLByf/N2g==",
+  "dgSpecHash": "OzXve6iVAYElAAHZyGpsb7rUDSVGQ4yh3hE9LlpkjRLDOqNSLDY4butnR3dp/Nob0mhYqACNrec83nw9jXK2pg==",
   "success": true,
   "projectFilePath": "/Users/nathanaeldelfino/Documents/_dev/GithubActions/mslearn-gerenciando-recursos-no-bicep-do-inicio-ao-fim/src/ToyCompany/ToyCompany.Website/ToyCompany.Website.csproj",
   "expectedPackageFiles": [
@@ -38,7 +38,10 @@
     "/Users/nathanaeldelfino/.nuget/packages/system.security.permissions/4.7.0/system.security.permissions.4.7.0.nupkg.sha512",
     "/Users/nathanaeldelfino/.nuget/packages/system.security.principal.windows/4.7.0/system.security.principal.windows.4.7.0.nupkg.sha512",
     "/Users/nathanaeldelfino/.nuget/packages/system.text.encoding.codepages/4.7.0/system.text.encoding.codepages.4.7.0.nupkg.sha512",
-    "/Users/nathanaeldelfino/.nuget/packages/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg.sha512"
+    "/Users/nathanaeldelfino/.nuget/packages/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg.sha512",
+    "/Users/nathanaeldelfino/.nuget/packages/microsoft.netcore.app.ref/3.1.0/microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "/Users/nathanaeldelfino/.nuget/packages/microsoft.aspnetcore.app.ref/3.1.10/microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512",
+    "/Users/nathanaeldelfino/.nuget/packages/microsoft.netcore.app.host.osx-x64/3.1.32/microsoft.netcore.app.host.osx-x64.3.1.32.nupkg.sha512"
   ],
   "logs": []
 }
