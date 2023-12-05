@@ -94,6 +94,8 @@ jobs:
         template: ./deploy/main.bicep
         parameters: >
            environmentType=${{ inputs.environmentType }}
+           sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
+           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}             
 # Deploy website           
   deploy-website:
     needs: deploy
