@@ -131,6 +131,7 @@ jobs:
     needs:
       - deploy
       - deploy-database
+      - seed-storage-account
     environment: ${{ inputs.environmentType }}
     runs-on: ubuntu-latest
     steps:
