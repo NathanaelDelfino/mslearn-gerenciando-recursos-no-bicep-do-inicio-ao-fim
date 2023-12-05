@@ -130,8 +130,7 @@ jobs:
   seed-database:
     needs:
       - deploy
-      - deploy-website
-      - deploy-database      
+      - deploy-database
     environment: ${{ inputs.environmentType }}
     runs-on: ubuntu-latest
     steps:
@@ -148,14 +147,11 @@ jobs:
       with:
         server-name: ${{ needs.deploy.outputs.sqlServerFullyQualifiedDomainName }}
         connection-string: ${{ format('Server={0};Initial Catalog={1};User Id={2};Password={3};', needs.deploy.outputs.sqlServerFullyQualifiedDomainName, needs.deploy.outputs.sqlDatabaseName, inputs.sqlServerAdministratorLogin, secrets.sqlServerAdministratorLoginPassword) }}
-        sql-file: 'deploy/sample-data/Toys.sql'
+        sql-file: 'src/ToyCompany/ToyCompany.Database/Toys.sql'
 # Seed storage account
   seed-storage-account:
     needs: 
       - deploy
-      - deploy-website
-      - deploy-database
-      - seed-database
     environment: ${{ inputs.environmentType }}
     runs-on: ubuntu-latest
     steps:
@@ -179,11 +175,11 @@ jobs:
   smoke-test:
     runs-on: ubuntu-latest
     needs: 
-        - deploy
-        - deploy-website
-        - deploy-database
-        - seed-database
-        - seed-storage-account
+      - deploy
+      - deploy-website
+      - deploy-database
+      - seed-database
+      - seed-storage-account        
     steps:
     - uses: actions/checkout@v3
     - run: |
