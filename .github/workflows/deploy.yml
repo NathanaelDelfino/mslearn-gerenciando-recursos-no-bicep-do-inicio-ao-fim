@@ -55,7 +55,8 @@ jobs:
          parameters: >
            environmentType=${{ inputs.environmentType }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
-           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}         additionalArguments: --what-if
+           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}         
+         additionalArguments: --what-if
 # Deploy to Azure
   deploy:
     needs: validate
