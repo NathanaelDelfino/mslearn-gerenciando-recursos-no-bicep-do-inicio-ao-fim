@@ -9,12 +9,12 @@ on:
       resourceGroupName:
         required: true
         type: string
-      sqlServerAdministratorLogin:
-        required: true
-        type: string
       # reviewApiUrl:
       #   required: true
       #   type: string
+      sqlServerAdministratorLogin:
+        required: true
+        type: string
     secrets:
       AZURE_CLIENT_ID:
         required: true
@@ -22,11 +22,10 @@ on:
         required: true
       AZURE_SUBSCRIPTION_ID:
         required: true
-      sqlServerAdministratorLoginPassword:
-        required: true
       # reviewApiKey:
       #   required: true
-
+      sqlServerAdministratorLoginPassword:
+        required: true
 jobs:
   validate:
      runs-on: ubuntu-latest
@@ -47,9 +46,10 @@ jobs:
          resourceGroupName: ${{ inputs.resourceGroupName }}
          template: ./deploy/main.bicep
          parameters: >
-           environmentType=${{ inputs.environmentType }}    
+           environmentType=${{ inputs.environmentType }}
+           reviewApiKey=${{ secrets.reviewApiKey }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
-           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}                  
+           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}
          deploymentMode: Validate
      - if: inputs.environmentType == 'Production'
        uses: azure/arm-deploy@v1
@@ -61,9 +61,11 @@ jobs:
          template: ./deploy/main.bicep
          parameters: >
            environmentType=${{ inputs.environmentType }}
+           reviewApiKey=${{ secrets.reviewApiKey }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
-           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}         additionalArguments: --what-if
-# Deploy to Azure
+           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}
+         additionalArguments: --what-if
+
   deploy:
     needs: validate
     environment: ${{ inputs.environmentType }}
@@ -93,10 +95,11 @@ jobs:
         resourceGroupName: ${{ inputs.resourceGroupName }}
         template: ./deploy/main.bicep
         parameters: >
-           environmentType=${{ inputs.environmentType }}
+           environmentType=${{ inputs.environmentType }}           
+           reviewApiKey=${{ secrets.reviewApiKey }}
            sqlServerAdministratorLogin=${{ inputs.sqlServerAdministratorLogin }}
-           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}             
-# Deploy website           
+           sqlServerAdministratorLoginPassword=${{ secrets.sqlServerAdministratorLoginPassword }}
+
   deploy-website:
     needs: deploy
     environment: ${{ inputs.environmentType }}
@@ -113,8 +116,8 @@ jobs:
       name: Deploy website
       with:
         app-name: ${{ needs.deploy.outputs.appServiceAppName }}
-        package: website/publish.zip           
-# Deploy database 
+        package: website/publish.zip
+
   deploy-database:
     needs: deploy
     environment: ${{ inputs.environmentType }}
@@ -132,13 +135,12 @@ jobs:
       with:
         server-name: ${{ needs.deploy.outputs.sqlServerFullyQualifiedDomainName }}
         connection-string: ${{ format('Server={0};Initial Catalog={1};User Id={2};Password={3};', needs.deploy.outputs.sqlServerFullyQualifiedDomainName, needs.deploy.outputs.sqlDatabaseName, inputs.sqlServerAdministratorLogin, secrets.sqlServerAdministratorLoginPassword) }}
-        dacpac-package: database/ToyCompany.Database.dacpac         
-# Seed database
+        dacpac-package: database/ToyCompany.Database.dacpac
+
   seed-database:
     needs:
-      - deploy
-      - deploy-website
-      - deploy-database      
+    - deploy
+    - deploy-database
     environment: ${{ inputs.environmentType }}
     runs-on: ubuntu-latest
     steps:
@@ -156,13 +158,9 @@ jobs:
         server-name: ${{ needs.deploy.outputs.sqlServerFullyQualifiedDomainName }}
         connection-string: ${{ format('Server={0};Initial Catalog={1};User Id={2};Password={3};', needs.deploy.outputs.sqlServerFullyQualifiedDomainName, needs.deploy.outputs.sqlDatabaseName, inputs.sqlServerAdministratorLogin, secrets.sqlServerAdministratorLoginPassword) }}
         sql-file: 'deploy/sample-data/Toys.sql'
-# Seed storage account
+
   seed-storage-account:
-    needs: 
-      - deploy
-      - deploy-website
-      - deploy-database
-      - seed-database
+    needs: deploy
     environment: ${{ inputs.environmentType }}
     runs-on: ubuntu-latest
     steps:
@@ -182,15 +180,15 @@ jobs:
               --account-name ${{ needs.deploy.outputs.storageAccountName }} \
               --destination ${{ needs.deploy.outputs.storageAccountImagesBlobContainerName }} \
               --source 'deploy/sample-data/toyimages'
-#Teste de fumaça        
+
   smoke-test:
     runs-on: ubuntu-latest
-    needs: 
-        - deploy
-        - deploy-website
-        - deploy-database
-        - seed-database
-        - seed-storage-account
+    needs:
+    - deploy
+    - deploy-website
+    - deploy-database
+    - seed-database
+    - seed-storage-account
     steps:
     - uses: actions/checkout@v3
     - run: |
